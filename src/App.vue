@@ -3,6 +3,7 @@
 let id = 0;
 
 export default {
+  
   data() {
     return {
       message: "I love you",
@@ -16,7 +17,11 @@ export default {
         { id: id++, text: "Learn JS", done: true },
         { id: id++, text: "Learn Vue", done: false }
       ],
-      hideCompleted: false
+      hideCompleted: false,
+      
+      // watches
+      todoId: 1,
+      todoData: null
     }
   },
   computed: {
@@ -38,6 +43,19 @@ export default {
     removeTodo(todo) {
       this.todos = this.todos.filter(t => t !== todo)
     },
+    async fetchData() {
+      const res = await fetch(`https://jsonplaceholder.typicode.com/todos/${this.todoId}`);
+      this.todoData = await res.json()
+    }
+  },
+  mounted() {
+    this.$refs.p.textContent = 'mounted!';
+    this.fetchData();
+  },
+  watch: {
+    todoId() {
+      this.fetchData();
+    }
   }
 }
 </script>
@@ -75,6 +93,14 @@ export default {
   </ul>
   <button @click="hideCompleted = !hideCompleted">{{ hideCompleted ? 'Show all' : 'Hide Completed'}}</button>
 
+  <!-- Lifecycle and Template Refs -->
+  <p ref="p">Hello</p>
+
+  <!-- Watchers -->
+  <p>Todo id: {{ todoId }}</p>
+  <button @click="todoId++">Fetch next todo</button>
+  <p v-if="!todoData">Loading...</p>
+  <p v-else>{{todoData}}</p>
 </template>
 
 <style>
