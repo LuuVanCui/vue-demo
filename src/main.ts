@@ -1,7 +1,8 @@
 import { createApp } from "vue";
 
-import App from "./App.vue";
+import App from "./Demo.vue";
+import SimpleComponentVue from "./SimpleComponent.vue";
 
-const app = createApp(App);
+const app = createApp(SimpleComponentVue);
 
 app.mount("#app");
